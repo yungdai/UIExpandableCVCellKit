@@ -10,6 +10,10 @@
 		9FEB90B422832EC0008BF116 /* UIExpandableCVCellKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FEB90AA22832EC0008BF116 /* UIExpandableCVCellKit.framework */; };
 		9FEB90B922832EC0008BF116 /* UIExpandableCVCellKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90B822832EC0008BF116 /* UIExpandableCVCellKitTests.swift */; };
 		9FEB90BB22832EC0008BF116 /* UIExpandableCVCellKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEB90AD22832EC0008BF116 /* UIExpandableCVCellKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9FEB90C722832FC3008BF116 /* ExpandedCellCollectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C422832FC3008BF116 /* ExpandedCellCollectionProtocol.swift */; };
+		9FEB90C822832FC3008BF116 /* ExpandedCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C522832FC3008BF116 /* ExpandedCellProtocol.swift */; };
+		9FEB90C922832FC3008BF116 /* ExpandedCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C622832FC3008BF116 /* ExpandedCellViewModel.swift */; };
+		9FEB90CB2283302E008BF116 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90CA2283302E008BF116 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +33,10 @@
 		9FEB90B322832EC0008BF116 /* UIExpandableCVCellKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIExpandableCVCellKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEB90B822832EC0008BF116 /* UIExpandableCVCellKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExpandableCVCellKitTests.swift; sourceTree = "<group>"; };
 		9FEB90BA22832EC0008BF116 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9FEB90C422832FC3008BF116 /* ExpandedCellCollectionProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedCellCollectionProtocol.swift; sourceTree = "<group>"; };
+		9FEB90C522832FC3008BF116 /* ExpandedCellProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedCellProtocol.swift; sourceTree = "<group>"; };
+		9FEB90C622832FC3008BF116 /* ExpandedCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedCellViewModel.swift; sourceTree = "<group>"; };
+		9FEB90CA2283302E008BF116 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +79,10 @@
 		9FEB90AC22832EC0008BF116 /* UIExpandableCVCellKit */ = {
 			isa = PBXGroup;
 			children = (
+				9FEB90C422832FC3008BF116 /* ExpandedCellCollectionProtocol.swift */,
+				9FEB90C522832FC3008BF116 /* ExpandedCellProtocol.swift */,
+				9FEB90C622832FC3008BF116 /* ExpandedCellViewModel.swift */,
+				9FEB90CA2283302E008BF116 /* Extensions.swift */,
 				9FEB90AD22832EC0008BF116 /* UIExpandableCVCellKit.h */,
 				9FEB90AE22832EC0008BF116 /* Info.plist */,
 			);
@@ -148,6 +160,7 @@
 				TargetAttributes = {
 					9FEB90A922832EC0008BF116 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 					};
 					9FEB90B222832EC0008BF116 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -194,6 +207,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FEB90C922832FC3008BF116 /* ExpandedCellViewModel.swift in Sources */,
+				9FEB90C822832FC3008BF116 /* ExpandedCellProtocol.swift in Sources */,
+				9FEB90C722832FC3008BF116 /* ExpandedCellCollectionProtocol.swift in Sources */,
+				9FEB90CB2283302E008BF116 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +358,7 @@
 		9FEB90BF22832EC0008BF116 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -358,6 +376,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yungdai.UIExpandableCVCellKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -366,6 +385,7 @@
 		9FEB90C022832EC0008BF116 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -391,6 +411,7 @@
 		9FEB90C222832EC0008BF116 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W9YJQYCY2W;
 				INFOPLIST_FILE = UIExpandableCVCellKitTests/Info.plist;
@@ -409,6 +430,7 @@
 		9FEB90C322832EC0008BF116 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W9YJQYCY2W;
 				INFOPLIST_FILE = UIExpandableCVCellKitTests/Info.plist;
