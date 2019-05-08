@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = 'UIExpandableCVCellKit'
   s.version          = '0.1.0'
-  s.swift_versions   = '4.0'
+  s.swift_versions   = '5.0'
   s.summary          = 'Recreate the Apple Appstore cell expansion experience!'
 
   s.description      = <<-DESC
@@ -27,6 +27,6 @@ Recreate the Apple Appstore cell experience when you tap on a cell.  Have the ce
   s.source           = { :git => 'https://github.com/yungdai/UIExpandableCVCellKit.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '12.2'
-  s.source_files = 'UIExpandableCVCellKit/*.{swift,plist}'
+  s.source_files = 'UIExpandableCVCellKit/*.{swift,plist,h,m}'
 
 end
