@@ -64,7 +64,7 @@ extension ExpandedCellProtocol {
 	}
 	
 	/// optional: generic implimentation to open cell
-	func animateCellOpenLogic() {
+	public func animateCellOpenLogic() {
 		
 		expandedCellCollectionProtocol?.isOpen = true
 		expandedCellCollectionProtocol?.statusBarShoudlBeHidden = true

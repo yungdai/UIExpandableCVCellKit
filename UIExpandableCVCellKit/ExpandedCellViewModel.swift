@@ -19,7 +19,7 @@ public struct ExpandedCellViewModel {
 	
 	weak var expandedCellCollectionProtocol: ExpandedCellCollectionProtocol?
 	
-	init( originalBounds: CGRect, originalCenter: CGPoint,
+	public init( originalBounds: CGRect, originalCenter: CGPoint,
 		 openedBounds: CGRect, openedCenter: CGPoint,
 		 springDamping: CGFloat,
 		 springVelocity: CGFloat, animationDuration: TimeInterval, expandedCellCollectionProtocol: ExpandedCellCollectionProtocol) {
