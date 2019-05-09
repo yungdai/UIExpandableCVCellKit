@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol ExpandedCellProtocol: UICollectionViewCell {
+public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	
 	var originalBounds: CGRect { get set }
 	var originalCenter: CGPoint { get set }
@@ -18,16 +18,17 @@ public protocol ExpandedCellProtocol: UICollectionViewCell {
 	var animationDuration: TimeInterval { get set }
 	var dragThreshold: CGFloat { get set }
 	var panGesture: UIPanGestureRecognizer { get set }
-	var expandedCellCollectionProtocol: ExpandedCellCollectionProtocol? { get set }
+	var expandableCVProtocol: ExpandableCVProtocol? { get set }
+	var scrollDirection: UICollectionView.ScrollDirection { get set }
 	
 	func openCell()
 	func closeCell()
 	func snapBackCell()
 }
 
-extension ExpandedCellProtocol {
+extension ExpandableCVCellProtocol {
 	
-	/// Used to set up the pan gesture in the ExpandedViewCell
+	/// Set up the pan gesture in the ExpandedViewCell
 	public func setupPanGesture(selector: Selector) {
 		
 		self.addGestureRecognizer(panGesture)
@@ -35,21 +36,22 @@ extension ExpandedCellProtocol {
 		panGesture.addTarget(self, action: selector)
 	}
 	
+	/// Configure the gesturing between cell and the collection so they don't overlap with each other
 	public func configureGesture(on focus: GestureFocus) {
 		
 		switch focus {
 		case .onCell:
 			panGesture.isEnabled = true
-			expandedCellCollectionProtocol?.collectionView.isScrollEnabled = false
+			expandableCVProtocol?.collectionView.isScrollEnabled = false
 			
 		case .onCollection:
 			panGesture.isEnabled = false
-			expandedCellCollectionProtocol?.collectionView.isScrollEnabled = true
+			expandableCVProtocol?.collectionView.isScrollEnabled = true
 		}
 	}
 	
 	/// Configure the cell with the viewModel
-	public func configure(with viewModel: ExpandedCellViewModel?) {
+	public func configure(with viewModel: ExpandableCellViewModel?) {
 		
 		guard let viewModel = viewModel else { return }
 		
@@ -60,25 +62,41 @@ extension ExpandedCellProtocol {
 		springDamping = viewModel.springDamping
 		springVelocity = viewModel.springVelocity
 		animationDuration = viewModel.animationDuration
-		expandedCellCollectionProtocol = viewModel.expandedCellCollectionProtocol
+		expandableCVProtocol = viewModel.expandableCVProtocol
+		scrollDirection = viewModel.scrollDirection
 	}
 	
-	/// optional: generic implimentation to open cell
+	/// Default Implimentation to open cell
 	public func animateCellOpenLogic() {
 		
-		expandedCellCollectionProtocol?.isOpen = true
-		expandedCellCollectionProtocol?.statusBarShoudlBeHidden = true
+		expandableCVProtocol?.isOpen = true
+		expandableCVProtocol?.statusBarShoudlBeHidden = true
 		configureGesture(on: .onCell)
 		
-		guard let collectionVC = expandedCellCollectionProtocol?.collectionView else { return }
+		guard let collectionVC = expandableCVProtocol?.collectionView else { return }
 		
 		UIView.animate(withDuration: TimeInterval(animationDuration), delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
-			
-			// fixes the offset when you first start because you will have an offset -0 for y
-			if collectionVC.contentOffset.y < 0 {
-				collectionVC.contentOffset.y = 0
+
+			switch self.scrollDirection {
+				
+			case .vertical:
+				
+				// fixes the offset when you first start because you will have an offset -0 for y
+				if collectionVC.contentOffset.y < 0 {
+					collectionVC.contentOffset.y = 0
+				}
+				
+			case .horizontal:
+				
+				// fixes the offset when you first start because you will have an offset -0 for x
+				if collectionVC.contentOffset.x < 0 {
+					collectionVC.contentOffset.x = 0
+				}
+				
+			default:
+				break
 			}
-			
+
 			let currentCenterPoint = collectionVC.getCurrentCenterPoint()
 			
 			self.bounds = collectionVC.bounds
@@ -93,11 +111,11 @@ extension ExpandedCellProtocol {
 		})
 	}
 	
-	/// optional: generic implimentation to close cell
+	/// Default implimentation to close cell
 	public func closeCellLogic() {
 		
-		expandedCellCollectionProtocol?.statusBarShoudlBeHidden = false
-		expandedCellCollectionProtocol?.isOpen = false
+		expandableCVProtocol?.statusBarShoudlBeHidden = false
+		expandableCVProtocol?.isOpen = false
 		configureGesture(on: .onCollection)
 		
 		UIView.animate(withDuration: animationDuration, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
@@ -109,7 +127,7 @@ extension ExpandedCellProtocol {
 		})
 	}
 	
-	/// optional: used to snap the cell back when released
+	/// Default logic to snap the cell back when released
 	public func snapBackLogic() {
 		
 		UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
@@ -123,7 +141,7 @@ extension ExpandedCellProtocol {
 	
 	public func cellGesturedLogic() {
 
-		if expandedCellCollectionProtocol?.isOpen ?? false {
+		if expandableCVProtocol?.isOpen ?? false {
 			
 			let distance = panGesture.translation(in: self).y
 			
@@ -131,7 +149,7 @@ extension ExpandedCellProtocol {
 			case .changed:
 				
 				if distance > 0 {
-					if let height = expandedCellCollectionProtocol?.collectionView.bounds.height {
+					if let height = expandableCVProtocol?.collectionView.bounds.height {
 						
 						if distance > height * dragThreshold {
 							closeCell()
@@ -143,7 +161,7 @@ extension ExpandedCellProtocol {
 				
 			case .ended:
 				
-				if let height = expandedCellCollectionProtocol?.collectionView.bounds.height {
+				if let height = expandableCVProtocol?.collectionView.bounds.height {
 					
 					if distance < height * dragThreshold {
 						
@@ -197,5 +215,4 @@ extension ExpandedCellProtocol {
 		
 		self.layoutIfNeeded()
 	}
-	
 }

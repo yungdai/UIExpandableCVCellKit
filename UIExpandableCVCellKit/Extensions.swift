@@ -21,7 +21,7 @@ extension UIApplication {
 
 extension CGFloat {
 	
-	// handy helper that can be set an a CGFloat extension to make sure you get guidance for values between two numbers.
+	/// handy helper that can be set an a CGFloat extension to make sure you get guidance for values between two numbers.
 	static func returnNumberBetween(minimum smallerNumber: CGFloat, maximum largerNumber: CGFloat, inputValue value: CGFloat) -> CGFloat {
 		
 		let returnedFloat = minimum(largerNumber, maximum(smallerNumber, value))
@@ -33,12 +33,27 @@ extension CGFloat {
 extension UICollectionView {
 	
 	func getCurrentCenterPoint() -> CGPoint {
+
+		var currentCenter: CGPoint = CGPoint.zero
 		
-		let collectionViewCenter = self.center
-		let currentY = collectionViewCenter.y + self.contentOffset.y
-		let currentCenter = CGPoint(x: collectionViewCenter.x, y: getYOffset(currentCenterY: currentY))
-		
-		print(self.contentOffset.y)
+		if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
+
+			switch flowLayout.scrollDirection {
+				
+			case .vertical:
+				
+				let currentY = center.y + contentOffset.y
+				currentCenter = CGPoint(x: center.x, y: getYOffset(currentCenterY: currentY))
+				
+			case .horizontal:
+				
+				let currentX = center.x + contentOffset.x
+				currentCenter = CGPoint(x: getXOffset(currentCenterX: currentX), y: center.y)
+				
+			@unknown default:
+				fatalError("Unkown Direction")
+			}
+		}
 		
 		return currentCenter
 	}
@@ -49,6 +64,15 @@ extension UICollectionView {
 		let maxY = self.contentSize.height - (self.frame.height / 2)
 		
 		let offset = CGFloat.returnNumberBetween(minimum: 0, maximum: maxY, inputValue: currentCenterY)
+		
+		return offset
+	}
+	
+	func getXOffset(currentCenterX: CGFloat) -> CGFloat {
+		
+		let maxX = self.contentSize.width - (self.frame.width / 2)
+		
+		let offset = CGFloat.returnNumberBetween(minimum: 0, maximum: maxX, inputValue: currentCenterX)
 		
 		return offset
 	}

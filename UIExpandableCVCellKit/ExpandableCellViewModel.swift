@@ -7,7 +7,7 @@
 
 import UIKit
 
-public struct ExpandedCellViewModel {
+public struct ExpandableCellViewModel {
 
 	let originalBounds: CGRect
 	let originalCenter: CGPoint
@@ -16,13 +16,14 @@ public struct ExpandedCellViewModel {
 	let springDamping: CGFloat
 	let springVelocity: CGFloat
 	let animationDuration: TimeInterval
+	let scrollDirection: UICollectionView.ScrollDirection
 	
-	weak var expandedCellCollectionProtocol: ExpandedCellCollectionProtocol?
+	weak var expandableCVProtocol: ExpandableCVProtocol?
 	
-	public init( originalBounds: CGRect, originalCenter: CGPoint,
+	public init(originalBounds: CGRect, originalCenter: CGPoint,
 		 openedBounds: CGRect, openedCenter: CGPoint,
 		 springDamping: CGFloat,
-		 springVelocity: CGFloat, animationDuration: TimeInterval, expandedCellCollectionProtocol: ExpandedCellCollectionProtocol) {
+		 springVelocity: CGFloat, animationDuration: TimeInterval, expandedCellCollectionProtocol: ExpandableCVProtocol) {
 
 		self.originalBounds = originalBounds
 		self.originalCenter = originalCenter
@@ -31,6 +32,12 @@ public struct ExpandedCellViewModel {
 		self.springDamping = springDamping
 		self.springVelocity = springVelocity
 		self.animationDuration = animationDuration
-		self.expandedCellCollectionProtocol = expandedCellCollectionProtocol
+		self.expandableCVProtocol = expandedCellCollectionProtocol
+		
+		if let flowLayout = expandableCVProtocol?.collectionViewLayout as? UICollectionViewFlowLayout {
+			self.scrollDirection = flowLayout.scrollDirection
+		} else {
+			self.scrollDirection = .vertical
+		}
 	}
 }

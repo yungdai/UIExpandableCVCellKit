@@ -10,9 +10,9 @@
 		9FEB90B422832EC0008BF116 /* UIExpandableCVCellKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FEB90AA22832EC0008BF116 /* UIExpandableCVCellKit.framework */; };
 		9FEB90B922832EC0008BF116 /* UIExpandableCVCellKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90B822832EC0008BF116 /* UIExpandableCVCellKitTests.swift */; };
 		9FEB90BB22832EC0008BF116 /* UIExpandableCVCellKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEB90AD22832EC0008BF116 /* UIExpandableCVCellKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9FEB90C722832FC3008BF116 /* ExpandedCellCollectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C422832FC3008BF116 /* ExpandedCellCollectionProtocol.swift */; };
-		9FEB90C822832FC3008BF116 /* ExpandedCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C522832FC3008BF116 /* ExpandedCellProtocol.swift */; };
-		9FEB90C922832FC3008BF116 /* ExpandedCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C622832FC3008BF116 /* ExpandedCellViewModel.swift */; };
+		9FEB90C722832FC3008BF116 /* ExpandableCVProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C422832FC3008BF116 /* ExpandableCVProtocol.swift */; };
+		9FEB90C822832FC3008BF116 /* ExpandableCVCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C522832FC3008BF116 /* ExpandableCVCellProtocol.swift */; };
+		9FEB90C922832FC3008BF116 /* ExpandableCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90C622832FC3008BF116 /* ExpandableCellViewModel.swift */; };
 		9FEB90CB2283302E008BF116 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90CA2283302E008BF116 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,9 +33,9 @@
 		9FEB90B322832EC0008BF116 /* UIExpandableCVCellKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIExpandableCVCellKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEB90B822832EC0008BF116 /* UIExpandableCVCellKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExpandableCVCellKitTests.swift; sourceTree = "<group>"; };
 		9FEB90BA22832EC0008BF116 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9FEB90C422832FC3008BF116 /* ExpandedCellCollectionProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedCellCollectionProtocol.swift; sourceTree = "<group>"; };
-		9FEB90C522832FC3008BF116 /* ExpandedCellProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedCellProtocol.swift; sourceTree = "<group>"; };
-		9FEB90C622832FC3008BF116 /* ExpandedCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedCellViewModel.swift; sourceTree = "<group>"; };
+		9FEB90C422832FC3008BF116 /* ExpandableCVProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableCVProtocol.swift; sourceTree = "<group>"; };
+		9FEB90C522832FC3008BF116 /* ExpandableCVCellProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableCVCellProtocol.swift; sourceTree = "<group>"; };
+		9FEB90C622832FC3008BF116 /* ExpandableCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableCellViewModel.swift; sourceTree = "<group>"; };
 		9FEB90CA2283302E008BF116 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -79,9 +79,9 @@
 		9FEB90AC22832EC0008BF116 /* UIExpandableCVCellKit */ = {
 			isa = PBXGroup;
 			children = (
-				9FEB90C422832FC3008BF116 /* ExpandedCellCollectionProtocol.swift */,
-				9FEB90C522832FC3008BF116 /* ExpandedCellProtocol.swift */,
-				9FEB90C622832FC3008BF116 /* ExpandedCellViewModel.swift */,
+				9FEB90C422832FC3008BF116 /* ExpandableCVProtocol.swift */,
+				9FEB90C522832FC3008BF116 /* ExpandableCVCellProtocol.swift */,
+				9FEB90C622832FC3008BF116 /* ExpandableCellViewModel.swift */,
 				9FEB90CA2283302E008BF116 /* Extensions.swift */,
 				9FEB90AD22832EC0008BF116 /* UIExpandableCVCellKit.h */,
 				9FEB90AE22832EC0008BF116 /* Info.plist */,
@@ -207,9 +207,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FEB90C922832FC3008BF116 /* ExpandedCellViewModel.swift in Sources */,
-				9FEB90C822832FC3008BF116 /* ExpandedCellProtocol.swift in Sources */,
-				9FEB90C722832FC3008BF116 /* ExpandedCellCollectionProtocol.swift in Sources */,
+				9FEB90C922832FC3008BF116 /* ExpandableCellViewModel.swift in Sources */,
+				9FEB90C822832FC3008BF116 /* ExpandableCVCellProtocol.swift in Sources */,
+				9FEB90C722832FC3008BF116 /* ExpandableCVProtocol.swift in Sources */,
 				9FEB90CB2283302E008BF116 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

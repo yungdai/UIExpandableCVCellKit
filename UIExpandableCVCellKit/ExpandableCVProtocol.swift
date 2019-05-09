@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol ExpandedCellCollectionProtocol: UICollectionViewController {
+public protocol ExpandableCVProtocol: UICollectionViewController {
 
 	var statusBarShoudlBeHidden: Bool { get set}
 	var isOpen: Bool { get set }
