@@ -33,6 +33,14 @@ extension ExpandableCVCellProtocol {
 		animateCellOpenLogic()
 	}
 	
+	public func closeCell() {
+		animateCloseCellLogic()
+	}
+	
+	public func snapBackCell() {
+		snapBackLogic()
+	}
+	
 	/// Set up the pan gesture in the ExpandedViewCell
 	public func setupPanGesture(selector: Selector) {
 		
@@ -117,7 +125,7 @@ extension ExpandableCVCellProtocol {
 	}
 	
 	/// Default implimentation to close cell
-	public func closeCellLogic() {
+	public func animateCloseCellLogic() {
 		
 		expandableCVProtocol?.statusBarShoudlBeHidden = false
 		expandableCVProtocol?.isOpen = false

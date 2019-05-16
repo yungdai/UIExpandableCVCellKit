@@ -17,3 +17,10 @@ public enum GestureFocus {
 	case onCell, onCollection
 }
 
+extension ExpandableCVProtocol {
+	
+	func test() {
+		
+		print("tested")
+	}
+}
