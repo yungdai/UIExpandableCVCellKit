@@ -28,6 +28,11 @@ public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 
 extension ExpandableCVCellProtocol {
 	
+	
+	public func openCell() {
+		animateCellOpenLogic()
+	}
+	
 	/// Set up the pan gesture in the ExpandedViewCell
 	public func setupPanGesture(selector: Selector) {
 		
@@ -99,7 +104,7 @@ extension ExpandableCVCellProtocol {
 
 			let currentCenterPoint = collectionVC.getCurrentCenterPoint()
 			
-			self.bounds = collectionVC.bounds
+			self.bounds = self.openedBounds
 			self.center = currentCenterPoint
 			
 			// since you've moved you shoudl record the currentCenter point to the openedCenter

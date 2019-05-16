@@ -16,3 +16,4 @@ public protocol ExpandableCVProtocol: UICollectionViewController {
 public enum GestureFocus {
 	case onCell, onCollection
 }
+
