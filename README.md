@@ -30,9 +30,9 @@ A Framework to add a Apple Appstore like animation to expand the cell to fullscr
 
 - Optionally you may impliment the following functions to add or write your own code to animate the cells open, close, or snap back:
 
-  func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
-  func closeCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
-  func snapBackCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+  - func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+  - func closeCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+  - func snapBackCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
 
 <h2><b>Optional</b></h2>
 
