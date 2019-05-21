@@ -7,6 +7,8 @@
 
 import UIKit
 
+public typealias Handler = () -> Void
+
 public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	
 	var originalBounds: CGRect { get set }
@@ -20,26 +22,77 @@ public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	var panGesture: UIPanGestureRecognizer { get set }
 	var expandableCVProtocol: ExpandableCVProtocol? { get set }
 	var scrollDirection: UICollectionView.ScrollDirection { get set }
+
+	/**
+	Optional Implimentation how you would like to handle the opening the cell
 	
-	func openCell()
-	func closeCell()
-	func snapBackCell()
+	- Returns: a tuple to handle the animation, completion, and boolean to animate
+	```
+	Example:
+
+	let handler = {
+		// handler or animation code
+	}
+	
+	let completion = {
+		// completion code
+	}
+	
+	return (handler: handler, completion: completion, isAnimated: true)
+	```
+	*/
+	
+	func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+	
+	/** Optional Implimentation of how you would like to handle the closing of the cell
+	- Returns: a tuple to handle the animation, completion, and boolean to animate
+	```
+	Example:
+	
+	let handler = {
+	// handler or animation code
+	}
+	
+	let completion = {
+	// completion code
+	}
+	
+	return (handler: handler, completion: completion, isAnimated: true)
+	```
+	*/
+
+	func closeCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+	
+	/**
+	Optional Implimentation of how you would like to handle the snapping back of the cell when sliding it closed
+	- Returns: a tuple to handle the animation, completion, and boolean to animate
+	```
+	Example:
+	
+	let handler = {
+	// handler or animation code
+	}
+	
+	let completion = {
+	// completion code
+	}
+	
+	return (handler: handler, completion: completion, isAnimated: true)
+	```
+	*/
+	func snapBackCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
 }
 
 extension ExpandableCVCellProtocol {
+
+	public func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+	{ return (nil, nil, true) }
 	
+	public func closeCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+	{ return (nil, nil, true) }
 	
-	public func openCell() {
-		animateCellOpenLogic()
-	}
-	
-	public func closeCell() {
-		animateCloseCellLogic()
-	}
-	
-	public func snapBackCell() {
-		snapBackLogic()
-	}
+	public func snapBackCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+	{ return (nil, nil, true) }
 	
 	/// Set up the pan gesture in the ExpandedViewCell
 	public func setupPanGesture(selector: Selector) {
@@ -80,76 +133,138 @@ extension ExpandableCVCellProtocol {
 	}
 	
 	/// Default Implimentation to open cell
-	public func animateCellOpenLogic() {
+	public func animateCellOpen() {
 		
 		expandableCVProtocol?.isOpen = true
 		expandableCVProtocol?.statusBarShoudlBeHidden = true
 		configureGesture(on: .onCell)
-		
-		guard let collectionVC = expandableCVProtocol?.collectionView else { return }
-		
-		UIView.animate(withDuration: TimeInterval(animationDuration), delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
 
-			switch self.scrollDirection {
-				
-			case .vertical:
-				
-				// fixes the offset when you first start because you will have an offset -0 for y
-				if collectionVC.contentOffset.y < 0 {
-					collectionVC.contentOffset.y = 0
+		let animationBlock = openCellHandler()
+
+		if animationBlock.isAnimated {
+			
+			guard let collectionVC = expandableCVProtocol?.collectionView else { return }
+			
+			UIView.animate(withDuration: TimeInterval(animationDuration), delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
+
+				switch self.scrollDirection {
+					
+				case .vertical:
+					
+					// fixes the offset when you first start because you will have an offset -0 for y
+					if collectionVC.contentOffset.y < 0 {
+						collectionVC.contentOffset.y = 0
+					}
+					
+				case .horizontal:
+					
+					// fixes the offset when you first start because you will have an offset -0 for x
+					if collectionVC.contentOffset.x < 0 {
+						collectionVC.contentOffset.x = 0
+					}
+					
+				default:
+					break
 				}
 				
-			case .horizontal:
+				let currentCenterPoint = collectionVC.getCurrentCenterPoint()
 				
-				// fixes the offset when you first start because you will have an offset -0 for x
-				if collectionVC.contentOffset.x < 0 {
-					collectionVC.contentOffset.x = 0
+				self.bounds = self.openedBounds
+				self.center = currentCenterPoint
+				
+				// since you've moved you shoudl record the currentCenter point to the openedCenter
+				self.openedCenter = currentCenterPoint
+				
+				// ensures no cells below that will overlap this cell.
+				collectionVC.bringSubviewToFront(self)
+				
+				// run additional animations
+				if let animations = animationBlock.handler {
+					animations()
 				}
 				
-			default:
-				break
-			}
+				self.layoutIfNeeded()
+			}, completion: { _ in
 
-			let currentCenterPoint = collectionVC.getCurrentCenterPoint()
-			
-			self.bounds = self.openedBounds
-			self.center = currentCenterPoint
-			
-			// since you've moved you shoudl record the currentCenter point to the openedCenter
-			self.openedCenter = currentCenterPoint
-			
-			// ensures no cells below that will overlap this cell.
-			collectionVC.bringSubviewToFront(self)
-			self.layoutIfNeeded()
-		})
+				if let completionHandler = animationBlock.completion {
+					completionHandler()
+				}
+			})
+		} else {
+			noAnimationCompletion(handler: animationBlock.handler, completion: animationBlock.completion)
+		}
 	}
 	
 	/// Default implimentation to close cell
-	public func animateCloseCellLogic() {
+	public func animateCloseCell() {
 		
 		expandableCVProtocol?.statusBarShoudlBeHidden = false
 		expandableCVProtocol?.isOpen = false
 		configureGesture(on: .onCollection)
 		
-		UIView.animate(withDuration: animationDuration, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
+		let animationBlock = closeCellHandler()
+
+		if animationBlock.isAnimated {
 			
-			self.bounds = self.originalBounds
-			self.center = self.originalCenter
-			
-			self.layoutIfNeeded()
-		})
+			UIView.animate(withDuration: animationDuration, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
+				
+				self.bounds = self.originalBounds
+				self.center = self.originalCenter
+				
+				if let animations = animationBlock.handler {
+					animations()
+				}
+
+				self.layoutIfNeeded()
+			}, completion: { _ in
+				
+				if let completion = animationBlock.completion {
+					completion()
+				}
+			})
+		} else {
+			noAnimationCompletion(handler: animationBlock.handler, completion: animationBlock.completion)
+		}
 	}
 	
 	/// Default logic to snap the cell back when released
-	public func snapBackLogic() {
+	public func animateSnapBackCell() {
+	
+		let animationBlock = snapBackCellHandler()
+
+		if animationBlock.isAnimated {
+			
+			UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
+				
+				self.bounds = self.openedBounds
+				self.center = self.openedCenter
+				
+				if let animations = animationBlock.handler {
+					animations()
+				}
+				
+				self.layoutIfNeeded()
+			}, completion: { _ in
+				
+				if let completion = animationBlock.completion {
+					completion()
+				}
+			})
+		} else {
+			
+			noAnimationCompletion(handler: animationBlock.handler, completion: animationBlock.completion)
+		}
+	}
+
+	private func noAnimationCompletion(handler: Handler?, completion: Handler?) {
 		
-		UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
-			
-			self.bounds = self.openedBounds
-			self.center = self.openedCenter
-			
-			self.layoutIfNeeded()
-		})
+		if let handler = handler {
+			handler()
+		}
+		
+		if let completion = completion {
+			completion()
+		}
 	}
 	
 	public func cellGesturedLogic() {
@@ -165,7 +280,7 @@ extension ExpandableCVCellProtocol {
 					if let height = expandableCVProtocol?.collectionView.bounds.height {
 						
 						if distance > height * dragThreshold {
-							closeCell()
+							animateCloseCell()
 						} else {
 							dragCellLogic(panDistance: distance, collectionViewHeight: height)
 						}
@@ -178,7 +293,7 @@ extension ExpandableCVCellProtocol {
 					
 					if distance < height * dragThreshold {
 						
-						snapBackCell()
+						animateSnapBackCell()
 					}
 				}
 				
