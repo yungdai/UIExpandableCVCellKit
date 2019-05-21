@@ -28,6 +28,7 @@ extension ExpandableCVProtocol {
 	}
 
 	@discardableResult
+	/// Use this function inside collectionView(_ collectionView:, didSelectItemAt indexPath:) to ensure that the cell opens when tapped.  This implimentation is mandatory
 	public func animateCellOpen(indexPath: IndexPath) -> ExpandableCVCellProtocol? {
 		
 		guard let cell = collectionView.cellForItem(at: indexPath) as? ExpandableCVCellProtocol else { return nil }

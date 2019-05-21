@@ -16,11 +16,11 @@ A Framework to add a Apple Appstore like animation to expand the cell to fullscr
 - Add this line to your viewDidAppear(_ animated:) delegate function:
   collectionView.isScrollEnabled = (isCellOpen) ? false : true
 
-  This will ensure when you swap between apps, that the scrolling is set to the correct setting when you swap betweena apps
+  This will ensure when you swap between apps, that the scrolling is set to the correct setting when you swap between apps
 
 - in collectionView(_ collectionView:, cellForItemAt indexPath:) dequeue your cell and then create the ExpandedCellViewModel and pass it to the cell using the ExpandableCVCellProtocol.configure(with: ExpandedCellViewMode) function, this will help the cell configure itself with all the settings it needs to function
 
-- in collectionView(_ collectionView:, didSelectItemAt indexPath:) ensure that you check if isCellOpened is false, so that you can run the animateCellOpen() function from the cell that impliments ExpandableCVCellProtocol
+- in collectionView(_ collectionView:, didSelectItemAt indexPath:) impliment animateCellOpen(indexPath:) inside that delegate function to allow the cell to open properly.  This is a manadatory implimentation.
 
 
 <b>UICollectionViewCell:</b>
@@ -33,16 +33,16 @@ A Framework to add a Apple Appstore like animation to expand the cell to fullscr
   - func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
   - func closeCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
   - func snapBackCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
-  
+
   Example of how to the openCellHanlder() or any of the other optional handler functions:
-  
+
 	```
 	func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool) {
-	
+
 		let animations = {
 			// your code that you would like animated into this block or any code you would like handled
 		}
-		
+
 		let completion = {
 			// any code you would like to run after the animations/handler
 		}
@@ -50,7 +50,7 @@ A Framework to add a Apple Appstore like animation to expand the cell to fullscr
 		return (handler: animations, completion: completion, isAnimated: true)
 	}
 	```
-	
+
 <h2><b>Optional</b></h2>
 
 If you want to hide and show the status bar when showing and hiding the expandable collectionViewCell do the following:
