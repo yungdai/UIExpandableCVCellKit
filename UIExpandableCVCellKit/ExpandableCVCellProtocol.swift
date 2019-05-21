@@ -80,6 +80,7 @@ public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	return (handler: handler, completion: completion, isAnimated: true)
 	```
 	*/
+	
 	func snapBackCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
 }
 
@@ -103,6 +104,7 @@ extension ExpandableCVCellProtocol {
 	}
 	
 	/// Configure the gesturing between cell and the collection so they don't overlap with each other
+	
 	public func configureGesture(on focus: GestureFocus) {
 		
 		switch focus {
@@ -117,6 +119,7 @@ extension ExpandableCVCellProtocol {
 	}
 	
 	/// Configure the cell with the viewModel
+	
 	public func configure(with viewModel: ExpandableCellViewModel?) {
 		
 		guard let viewModel = viewModel else { return }
@@ -133,9 +136,10 @@ extension ExpandableCVCellProtocol {
 	}
 	
 	/// Default Implimentation to open cell
+	
 	public func animateCellOpen() {
 		
-		expandableCVProtocol?.isOpen = true
+		expandableCVProtocol?.isCellOpened = true
 		expandableCVProtocol?.statusBarShoudlBeHidden = true
 		configureGesture(on: .onCell)
 
@@ -196,10 +200,11 @@ extension ExpandableCVCellProtocol {
 	}
 	
 	/// Default implimentation to close cell
+	
 	public func animateCloseCell() {
 		
 		expandableCVProtocol?.statusBarShoudlBeHidden = false
-		expandableCVProtocol?.isOpen = false
+		expandableCVProtocol?.isCellOpened = false
 		configureGesture(on: .onCollection)
 		
 		let animationBlock = closeCellHandler()
@@ -228,6 +233,7 @@ extension ExpandableCVCellProtocol {
 	}
 	
 	/// Default logic to snap the cell back when released
+	
 	public func animateSnapBackCell() {
 	
 		let animationBlock = snapBackCellHandler()
@@ -269,7 +275,7 @@ extension ExpandableCVCellProtocol {
 	
 	public func cellGesturedLogic() {
 
-		if expandableCVProtocol?.isOpen ?? false {
+		if expandableCVProtocol?.isCellOpened ?? false {
 			
 			let distance = panGesture.translation(in: self).y
 			
