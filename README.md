@@ -33,14 +33,30 @@ A Framework to add a Apple Appstore like animation to expand the cell to fullscr
   - func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
   - func closeCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
   - func snapBackCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
+  
+  Example of how to the openCellHanlder() or any of the other optional handler functions:
+  
+	```
+	func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool) {
+	
+		let animations = {
+			// your code that you would like animated into this block or any code you would like handled
+		}
+		
+		let completion = {
+			// any code you would like to run after the animations/handler
+		}
 
+		return (handler: animations, completion: completion, isAnimated: true)
+	}
+	```
+	
 <h2><b>Optional</b></h2>
 
 If you want to hide and show the status bar when showing and hiding the expandable collectionViewCell do the following:
 1. In your UICollectionView class
 
   Add:
-
 
 	override var prefersStatusBarHidden: Bool {
 		return statusBarShoudlBeHidden
