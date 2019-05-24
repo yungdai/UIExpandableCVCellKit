@@ -11,17 +11,17 @@ public typealias Handler = () -> Void
 
 public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	
-	var originalBounds: CGRect? { get set }
-	var originalCenter: CGPoint? { get set }
-	var openedBounds: CGRect? { get set }
-	var openedCenter: CGPoint? { get set }
-	var springDamping: CGFloat? { get set }
-	var springVelocity: CGFloat? { get set }
-	var animationDuration: TimeInterval? { get set }
-	var dragThreshold: CGFloat? { get set }
+	var originalBounds: CGRect { get set }
+	var originalCenter: CGPoint { get set }
+	var openedBounds: CGRect { get set }
+	var openedCenter: CGPoint { get set }
+	var springDamping: CGFloat { get set }
+	var springVelocity: CGFloat { get set }
+	var animationDuration: TimeInterval { get set }
+	var dragThreshold: CGFloat { get set }
 	var panGesture: UIPanGestureRecognizer { get set }
 	var expandableCVProtocol: ExpandableCVProtocol? { get set }
-	var scrollDirection: UICollectionView.ScrollDirection? { get set }
+	var scrollDirection: UICollectionView.ScrollDirection { get set }
 
 	/**
 	Optional Implimentation how you would like to handle the opening the cell
@@ -147,16 +147,11 @@ extension ExpandableCVCellProtocol {
 
 		if animationBlock.isAnimated {
 			
-			guard let collectionVC = expandableCVProtocol?.collectionView,
-			let animationDuration = animationDuration,
-			let springDamping = springDamping,
-			let springVelocity = springVelocity,
-			let scrollDirection = scrollDirection,
-			let openedBounds = openedBounds else { return }
+			guard let collectionVC = expandableCVProtocol?.collectionView else { return }
 			
 			UIView.animate(withDuration: TimeInterval(animationDuration), delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
 
-				switch scrollDirection {
+				switch self.scrollDirection {
 					
 				case .vertical:
 					
@@ -178,7 +173,7 @@ extension ExpandableCVCellProtocol {
 				
 				let currentCenterPoint = collectionVC.getCurrentCenterPoint()
 				
-				self.bounds = openedBounds
+				self.bounds = self.openedBounds
 				self.center = currentCenterPoint
 				
 				// since you've moved you shoudl record the currentCenter point to the openedCenter
@@ -216,16 +211,10 @@ extension ExpandableCVCellProtocol {
 
 		if animationBlock.isAnimated {
 			
-			guard let animationDuration = animationDuration,
-				let springDamping = springDamping,
-				let springVelocity = springVelocity,
-				let originalBounds = originalBounds,
-				let originalCenter = originalCenter else { return }
-			
 			UIView.animate(withDuration: animationDuration, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
 				
-				self.bounds = originalBounds
-				self.center = originalCenter
+				self.bounds = self.originalBounds
+				self.center = self.originalCenter
 				
 				if let animations = animationBlock.handler {
 					animations()
@@ -251,15 +240,10 @@ extension ExpandableCVCellProtocol {
 
 		if animationBlock.isAnimated {
 			
-			guard let springDamping = springDamping,
-				let springVelocity = springVelocity,
-				let openedBounds = openedBounds,
-				let openedCenter = openedCenter else { return }
-			
 			UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
 				
-				self.bounds = openedBounds
-				self.center = openedCenter
+				self.bounds = self.openedBounds
+				self.center = self.openedCenter
 				
 				if let animations = animationBlock.handler {
 					animations()
@@ -292,8 +276,6 @@ extension ExpandableCVCellProtocol {
 	public func cellGesturedLogic() {
 
 		if expandableCVProtocol?.isCellOpened ?? false {
-			
-			guard let dragThreshold = dragThreshold else { return }
 			
 			let distance = panGesture.translation(in: self).y
 			
@@ -330,10 +312,6 @@ extension ExpandableCVCellProtocol {
 	private func dragCellLogic(panDistance distance: CGFloat, collectionViewHeight height: CGFloat) {
 		
 		let percentageOfHeight = distance / height
-		
-		guard let originalCenter = originalCenter,
-			let openedBounds = openedBounds,
-			let openedCenter = openedCenter else { return }
 		
 		let dragWidth = openedBounds.width - (openedBounds.width * percentageOfHeight)
 		
