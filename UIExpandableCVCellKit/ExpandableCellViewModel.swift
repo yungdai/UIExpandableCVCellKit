@@ -11,11 +11,12 @@ public struct ExpandableCellViewModel {
 
 	let originalBounds: CGRect
 	let originalCenter: CGPoint
-	let openedBounds: CGRect
-	let openedCenter: CGPoint
+	var openedBounds: CGRect
+	var openedCenter: CGPoint
 	let springDamping: CGFloat
 	let springVelocity: CGFloat
 	let animationDuration: TimeInterval
+	let dragThreshold: CGFloat
 	let scrollDirection: UICollectionView.ScrollDirection
 	
 	weak var expandableCVProtocol: ExpandableCVProtocol?
@@ -23,7 +24,7 @@ public struct ExpandableCellViewModel {
 	public init(originalBounds: CGRect, originalCenter: CGPoint,
 		 openedBounds: CGRect, openedCenter: CGPoint,
 		 springDamping: CGFloat,
-		 springVelocity: CGFloat, animationDuration: TimeInterval, expandedCellCollectionProtocol: ExpandableCVProtocol) {
+		 springVelocity: CGFloat, animationDuration: TimeInterval, dragThreshold: CGFloat, expandedCellCollectionProtocol: ExpandableCVProtocol) {
 
 		self.originalBounds = originalBounds
 		self.originalCenter = originalCenter
@@ -33,6 +34,7 @@ public struct ExpandableCellViewModel {
 		self.springVelocity = springVelocity
 		self.animationDuration = animationDuration
 		self.expandableCVProtocol = expandedCellCollectionProtocol
+		self.dragThreshold = dragThreshold
 		
 		if let flowLayout = expandableCVProtocol?.collectionViewLayout as? UICollectionViewFlowLayout {
 			self.scrollDirection = flowLayout.scrollDirection
@@ -41,3 +43,4 @@ public struct ExpandableCellViewModel {
 		}
 	}
 }
+

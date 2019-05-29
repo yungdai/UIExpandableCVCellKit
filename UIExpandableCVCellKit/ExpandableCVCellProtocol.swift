@@ -9,19 +9,15 @@ import UIKit
 
 public typealias Handler = () -> Void
 
+public enum ExpandableCellErrors: Error {
+	
+	case noViewModel
+}
+
 public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	
-	var originalBounds: CGRect { get set }
-	var originalCenter: CGPoint { get set }
-	var openedBounds: CGRect { get set }
-	var openedCenter: CGPoint { get set }
-	var springDamping: CGFloat { get set }
-	var springVelocity: CGFloat { get set }
-	var animationDuration: TimeInterval { get set }
-	var dragThreshold: CGFloat { get set }
 	var panGesture: UIPanGestureRecognizer { get set }
-	var expandableCVProtocol: ExpandableCVProtocol? { get set }
-	var scrollDirection: UICollectionView.ScrollDirection { get set }
+	var viewModel: ExpandableCellViewModel? { get set }
 
 	/**
 	Optional Implimentation how you would like to handle the opening the cell
@@ -107,51 +103,47 @@ extension ExpandableCVCellProtocol {
 	
 	public func configureGesture(on focus: GestureFocus) {
 		
-		switch focus {
-		case .onCell:
-			panGesture.isEnabled = true
-			expandableCVProtocol?.collectionView.isScrollEnabled = false
-			
-		case .onCollection:
-			panGesture.isEnabled = false
-			expandableCVProtocol?.collectionView.isScrollEnabled = true
-		}
-	}
-	
-	/// Configure the cell with the viewModel
-	
-	public func configure(with viewModel: ExpandableCellViewModel?) {
 		
 		guard let viewModel = viewModel else { return }
 		
-		originalBounds = viewModel.originalBounds
-		originalCenter = viewModel.originalCenter
-		openedBounds = viewModel.openedBounds
-		openedCenter = viewModel.openedCenter
-		springDamping = viewModel.springDamping
-		springVelocity = viewModel.springVelocity
-		animationDuration = viewModel.animationDuration
-		expandableCVProtocol = viewModel.expandableCVProtocol
-		scrollDirection = viewModel.scrollDirection
+		switch focus {
+		case .onCell:
+			panGesture.isEnabled = true
+			viewModel.expandableCVProtocol?.collectionView.isScrollEnabled = false
+			
+		case .onCollection:
+			panGesture.isEnabled = false
+			viewModel.expandableCVProtocol?.collectionView.isScrollEnabled = true
+		}
+	}
+	
+	/// Configure the cell with the viewModel, this is a reqired function.
+	
+	public func configure(with viewModel: ExpandableCellViewModel?) throws {
+		
+		guard let viewModel = viewModel else { throw ExpandableCellErrors.noViewModel }
+		self.viewModel = viewModel
 	}
 	
 	/// Default Implimentation to open cell
 	
 	public func animateCellOpen() {
 		
-		expandableCVProtocol?.isCellOpened = true
-		expandableCVProtocol?.statusBarShoudlBeHidden = true
+		guard var viewModel = viewModel else { return }
+		
+		viewModel.expandableCVProtocol?.isCellOpened = true
+		viewModel.expandableCVProtocol?.statusBarShoudlBeHidden = true
 		configureGesture(on: .onCell)
 
 		let animationBlock = openCellHandler()
 
 		if animationBlock.isAnimated {
 			
-			guard let collectionVC = expandableCVProtocol?.collectionView else { return }
+			guard let collectionVC = viewModel.expandableCVProtocol?.collectionView else { return }
 			
-			UIView.animate(withDuration: TimeInterval(animationDuration), delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
+			UIView.animate(withDuration: TimeInterval(viewModel.animationDuration), delay: 0.0, usingSpringWithDamping: viewModel.springDamping, initialSpringVelocity: viewModel.springVelocity, options: .curveEaseInOut, animations: {
 
-				switch self.scrollDirection {
+				switch viewModel.scrollDirection {
 					
 				case .vertical:
 					
@@ -173,11 +165,11 @@ extension ExpandableCVCellProtocol {
 				
 				let currentCenterPoint = collectionVC.getCurrentCenterPoint()
 				
-				self.bounds = self.openedBounds
+				self.bounds = viewModel.openedBounds
 				self.center = currentCenterPoint
 				
 				// since you've moved you shoudl record the currentCenter point to the openedCenter
-				self.openedCenter = currentCenterPoint
+				viewModel.openedCenter = currentCenterPoint
 				
 				// ensures no cells below that will overlap this cell.
 				collectionVC.bringSubviewToFront(self)
@@ -203,18 +195,20 @@ extension ExpandableCVCellProtocol {
 	
 	public func animateCloseCell() {
 		
-		expandableCVProtocol?.statusBarShoudlBeHidden = false
-		expandableCVProtocol?.isCellOpened = false
+		guard let viewModel = viewModel else { return }
+		
+		viewModel.expandableCVProtocol?.statusBarShoudlBeHidden = false
+		viewModel.expandableCVProtocol?.isCellOpened = false
 		configureGesture(on: .onCollection)
 		
 		let animationBlock = closeCellHandler()
 
 		if animationBlock.isAnimated {
 			
-			UIView.animate(withDuration: animationDuration, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
+			UIView.animate(withDuration: viewModel.animationDuration, delay: 0.0, usingSpringWithDamping: viewModel.springDamping, initialSpringVelocity: viewModel.springVelocity, options: .curveEaseInOut, animations: {
 				
-				self.bounds = self.originalBounds
-				self.center = self.originalCenter
+				self.bounds = viewModel.originalBounds
+				self.center = viewModel.originalCenter
 				
 				if let animations = animationBlock.handler {
 					animations()
@@ -237,13 +231,15 @@ extension ExpandableCVCellProtocol {
 	public func animateSnapBackCell() {
 	
 		let animationBlock = snapBackCellHandler()
+		
+		guard let viewModel = viewModel else { return }
 
 		if animationBlock.isAnimated {
 			
-			UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: springDamping, initialSpringVelocity: springVelocity, options: .curveEaseInOut, animations: {
+			UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: viewModel.springDamping, initialSpringVelocity: viewModel.springVelocity, options: .curveEaseInOut, animations: {
 				
-				self.bounds = self.openedBounds
-				self.center = self.openedCenter
+				self.bounds = viewModel.openedBounds
+				self.center = viewModel.openedCenter
 				
 				if let animations = animationBlock.handler {
 					animations()
@@ -275,7 +271,9 @@ extension ExpandableCVCellProtocol {
 	
 	public func cellGesturedLogic() {
 
-		if expandableCVProtocol?.isCellOpened ?? false {
+		guard let viewModel = viewModel else { return }
+		
+		if viewModel.expandableCVProtocol?.isCellOpened ?? false {
 			
 			let distance = panGesture.translation(in: self).y
 			
@@ -283,9 +281,9 @@ extension ExpandableCVCellProtocol {
 			case .changed:
 				
 				if distance > 0 {
-					if let height = expandableCVProtocol?.collectionView.bounds.height {
+					if let height = viewModel.expandableCVProtocol?.collectionView.bounds.height {
 						
-						if distance > height * dragThreshold {
+						if distance > height * viewModel.dragThreshold {
 							animateCloseCell()
 						} else {
 							dragCellLogic(panDistance: distance, collectionViewHeight: height)
@@ -295,9 +293,9 @@ extension ExpandableCVCellProtocol {
 				
 			case .ended:
 				
-				if let height = expandableCVProtocol?.collectionView.bounds.height {
+				if let height = viewModel.expandableCVProtocol?.collectionView.bounds.height {
 					
-					if distance < height * dragThreshold {
+					if distance < height * viewModel.dragThreshold {
 						
 						animateSnapBackCell()
 					}
@@ -311,35 +309,37 @@ extension ExpandableCVCellProtocol {
 	
 	private func dragCellLogic(panDistance distance: CGFloat, collectionViewHeight height: CGFloat) {
 		
+		guard let viewModel = viewModel else { return }
+		
 		let percentageOfHeight = distance / height
 		
-		let dragWidth = openedBounds.width - (openedBounds.width * percentageOfHeight)
+		let dragWidth = viewModel.openedBounds.width - (viewModel.openedBounds.width * percentageOfHeight)
 		
-		let dragHeight = openedBounds
-			.height - (openedBounds.height * percentageOfHeight)
+		let dragHeight = viewModel.openedBounds
+			.height - (viewModel.openedBounds.height * percentageOfHeight)
 		
 		let dragOriginX: CGFloat
 		let dragOriginY: CGFloat
 		
 		// take into account if if the original center is greater than or less than the current x/y origin
-		if originalCenter.x < openedCenter.x {
+		if viewModel.originalCenter.x < viewModel.openedCenter.x {
 			
-			let difference = openedCenter.x - originalCenter.x
-			dragOriginX = openedCenter.x - (difference * percentageOfHeight)
+			let difference = viewModel.openedCenter.x - viewModel.originalCenter.x
+			dragOriginX = viewModel.openedCenter.x - (difference * percentageOfHeight)
 		} else {
 			
-			let difference = originalCenter.x - openedCenter.x
-			dragOriginX = openedCenter.x + (difference * percentageOfHeight)
+			let difference = viewModel.originalCenter.x - viewModel.openedCenter.x
+			dragOriginX = viewModel.openedCenter.x + (difference * percentageOfHeight)
 		}
 		
-		if originalCenter.y < openedCenter.y {
+		if viewModel.originalCenter.y < viewModel.openedCenter.y {
 			
-			let difference = openedCenter.y - originalCenter.y
-			dragOriginY = openedCenter.y - (difference * percentageOfHeight)
+			let difference = viewModel.openedCenter.y - viewModel.originalCenter.y
+			dragOriginY = viewModel.openedCenter.y - (difference * percentageOfHeight)
 		} else {
 			
-			let difference = originalCenter.y - openedCenter.y
-			dragOriginY = openedCenter.y + (difference * percentageOfHeight)
+			let difference = viewModel.originalCenter.y - viewModel.openedCenter.y
+			dragOriginY = viewModel.openedCenter.y + (difference * percentageOfHeight)
 		}
 		
 		self.bounds = CGRect(x: dragOriginX, y: dragOriginY, width: dragWidth, height: dragHeight)
