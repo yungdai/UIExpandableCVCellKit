@@ -10,15 +10,18 @@ A Framework to add a Apple Appstore like animation to expand the cell to fullscr
 
 <h2><b>Setup</b></h2>
 
+
+Required:
 <b>UICollectionViewController: </b>
+
 - Have your UICollectionView extend the ExpandableCVProtocol
 
 - Add this line to your viewDidAppear(_ animated:) delegate function:
   collectionView.isScrollEnabled = (isCellOpen) ? false : true
 
   This will ensure when you swap between apps, that the scrolling is set to the correct setting when you swap between apps
-
-- in collectionView(_ collectionView:, cellForItemAt indexPath:) dequeue your cell and then create the ExpandedCellViewModel and pass it to the cell using the ExpandableCVCellProtocol.configure(with: ExpandedCellViewMode) function, this will help the cell configure itself with all the settings it needs to function
+  
+- in collectionView(_ collectionView:, cellForItemAt indexPath:) dequeue your cell and then create the ExpandedCellViewModel and pass it to the cell using the ExpandableCVCellProtocol.configure(with: ExpandedCellViewMode) function, this will help the cell configure itself with all the settings it needs to function.
 
 - in collectionView(_ collectionView:, didSelectItemAt indexPath:) impliment animateCellOpen(indexPath:) inside that delegate function to allow the cell to open properly.  This is a manadatory implimentation.
 
@@ -27,6 +30,9 @@ A Framework to add a Apple Appstore like animation to expand the cell to fullscr
 - Have your UICollectionViewCell extend ExpandablerCVCellProtocol
 
 - Add setupPanGesture(selector: Selector) to your init(frame:) and init(coder:) initializers with your own gesturing funciton.  I usually call mine cellGestured(), inside that @objc function I add the default cellGesturedLogic() function.  You can of course override and write your own gesturing logic if required.
+
+
+Optional:
 
 - Optionally you may impliment the following functions to add or write your own code to animate the cells open, close, or snap back:
 
