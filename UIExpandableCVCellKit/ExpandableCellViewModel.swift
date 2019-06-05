@@ -5,7 +5,7 @@
 //  Created by Yung Dai on 2019-05-07.
 //
 
-import UIKit
+import Foundation
 
 public struct ExpandableCellViewModel {
 
@@ -43,4 +43,3 @@ public struct ExpandableCellViewModel {
 		}
 	}
 }
-

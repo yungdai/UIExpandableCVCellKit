@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F25D2EA22A05184008AE8CE /* ExpandableCVCKitErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F25D2E922A05184008AE8CE /* ExpandableCVCKitErrors.swift */; };
 		9FEB90B422832EC0008BF116 /* UIExpandableCVCellKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FEB90AA22832EC0008BF116 /* UIExpandableCVCellKit.framework */; };
 		9FEB90B922832EC0008BF116 /* UIExpandableCVCellKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEB90B822832EC0008BF116 /* UIExpandableCVCellKitTests.swift */; };
 		9FEB90BB22832EC0008BF116 /* UIExpandableCVCellKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEB90AD22832EC0008BF116 /* UIExpandableCVCellKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9F25D2E922A05184008AE8CE /* ExpandableCVCKitErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCVCKitErrors.swift; sourceTree = "<group>"; };
 		9FEB90AA22832EC0008BF116 /* UIExpandableCVCellKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UIExpandableCVCellKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FEB90AD22832EC0008BF116 /* UIExpandableCVCellKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIExpandableCVCellKit.h; sourceTree = "<group>"; };
 		9FEB90AE22832EC0008BF116 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				9FEB90C622832FC3008BF116 /* ExpandableCellViewModel.swift */,
 				9FEB90CA2283302E008BF116 /* Extensions.swift */,
 				9FEB90AD22832EC0008BF116 /* UIExpandableCVCellKit.h */,
+				9F25D2E922A05184008AE8CE /* ExpandableCVCKitErrors.swift */,
 				9FEB90AE22832EC0008BF116 /* Info.plist */,
 			);
 			path = UIExpandableCVCellKit;
@@ -207,6 +210,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F25D2EA22A05184008AE8CE /* ExpandableCVCKitErrors.swift in Sources */,
 				9FEB90C922832FC3008BF116 /* ExpandableCellViewModel.swift in Sources */,
 				9FEB90C822832FC3008BF116 /* ExpandableCVCellProtocol.swift in Sources */,
 				9FEB90C722832FC3008BF116 /* ExpandableCVProtocol.swift in Sources */,

@@ -5,33 +5,38 @@
 //  Created by Yung Dai on 2019-05-08.
 //
 
-import UIKit
+import Foundation
 
 public typealias Handler = () -> Void
 
-public enum ExpandableCellErrors: Error {
+public enum ExpandableCellViewProperties {
 	
-	case noViewModel
+	case openedBounds(CGRect)
+	case openedCenter(CGPoint)
+	case springDamping(CGFloat)
+	case springVelocity(CGFloat)
+	case animationDuration(TimeInterval)
+	case dragThreshold(CGFloat)
 }
 
 public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	
 	var panGesture: UIPanGestureRecognizer { get set }
 	var viewModel: ExpandableCellViewModel? { get set }
-
+	
 	/**
 	Optional Implimentation how you would like to handle the opening the cell
 	
 	- Returns: a tuple to handle the animation, completion, and boolean to animate
 	```
 	Example:
-
+	
 	let handler = {
-		// handler or animation code
+	// handler or animation code
 	}
 	
 	let completion = {
-		// completion code
+	// completion code
 	}
 	
 	return (handler: handler, completion: completion, isAnimated: true)
@@ -56,7 +61,7 @@ public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	return (handler: handler, completion: completion, isAnimated: true)
 	```
 	*/
-
+	
 	func closeCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
 	
 	/**
@@ -81,7 +86,7 @@ public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 }
 
 extension ExpandableCVCellProtocol {
-
+	
 	public func openCellHandler() -> (handler: Handler?, completion: Handler?, isAnimated: Bool)
 	{ return (nil, nil, true) }
 	
@@ -103,7 +108,6 @@ extension ExpandableCVCellProtocol {
 	
 	public func configureGesture(on focus: GestureFocus) {
 		
-		
 		guard let viewModel = viewModel else { return }
 		
 		switch focus {
@@ -119,30 +123,82 @@ extension ExpandableCVCellProtocol {
 	
 	/// Configure the cell with the viewModel, this is a reqired function.
 	
-	public func configure(with viewModel: ExpandableCellViewModel?) throws {
+	public func configure(withOptions options: [ExpandableCellViewProperties]?, expandableCVProtocol: ExpandableCVProtocol?) throws {
+
+		guard let expandableCVProtocol = expandableCVProtocol else { throw ExpandableCellErrors.noExpandableCVProtocol }
 		
-		guard let viewModel = viewModel else { throw ExpandableCellErrors.noViewModel }
+		var openedBounds: CGRect?
+		var openedCenter: CGPoint?
+		var springDamping: CGFloat?
+		var springVelocity: CGFloat?
+		var animationDuration: TimeInterval?
+		var dragThreshold: CGFloat?
+		
+		if let options = options {
+			
+			options.forEach {
+				
+				switch $0 {
+					
+				case .openedBounds(let expandedBounds):
+					openedBounds = expandedBounds
+					
+				case .openedCenter(let expandedCenter):
+					openedCenter = expandedCenter
+					
+				case .springDamping(let damping):
+					springDamping = damping
+					
+				case .springVelocity(let velocity):
+					springVelocity = velocity
+					
+				case .animationDuration(let duration):
+					animationDuration = duration
+					
+				case .dragThreshold(let threshold):
+					dragThreshold = threshold
+				}
+			}
+		}
+		
+		let viewModel = ExpandableCellViewModel(
+			originalBounds: self.bounds,
+			originalCenter: self.center,
+			openedBounds: openedBounds ?? expandableCVProtocol.view.bounds,
+			openedCenter: openedCenter ?? expandableCVProtocol.view.center,
+			springDamping: springDamping ?? 0.8,
+			springVelocity: springVelocity ?? 0.9,
+			animationDuration: animationDuration ?? 1,
+			dragThreshold: dragThreshold ?? 0.15,
+			expandedCellCollectionProtocol: expandableCVProtocol)
+		
 		self.viewModel = viewModel
+	}
+	
+	private func setViewModel(openedCenter: CGPoint) {
+		
+		guard viewModel != nil else { return }
+		viewModel?.openedCenter = openedCenter
 	}
 	
 	/// Default Implimentation to open cell
 	
 	public func animateCellOpen() {
 		
-		guard var viewModel = viewModel else { return }
+		guard let viewModel = viewModel else { return }
 		
 		viewModel.expandableCVProtocol?.isCellOpened = true
 		viewModel.expandableCVProtocol?.statusBarShoudlBeHidden = true
 		configureGesture(on: .onCell)
-
+		
 		let animationBlock = openCellHandler()
-
+		
 		if animationBlock.isAnimated {
 			
 			guard let collectionVC = viewModel.expandableCVProtocol?.collectionView else { return }
 			
 			UIView.animate(withDuration: TimeInterval(viewModel.animationDuration), delay: 0.0, usingSpringWithDamping: viewModel.springDamping, initialSpringVelocity: viewModel.springVelocity, options: .curveEaseInOut, animations: {
-
+				
 				switch viewModel.scrollDirection {
 					
 				case .vertical:
@@ -168,8 +224,8 @@ extension ExpandableCVCellProtocol {
 				self.bounds = viewModel.openedBounds
 				self.center = currentCenterPoint
 				
-				// since you've moved you shoudl record the currentCenter point to the openedCenter
-				viewModel.openedCenter = currentCenterPoint
+				// since you've moved you should record the currentCenter point to the openedCenter
+				self.setViewModel(openedCenter: currentCenterPoint)
 				
 				// ensures no cells below that will overlap this cell.
 				collectionVC.bringSubviewToFront(self)
@@ -181,7 +237,7 @@ extension ExpandableCVCellProtocol {
 				
 				self.layoutIfNeeded()
 			}, completion: { _ in
-
+				
 				if let completionHandler = animationBlock.completion {
 					completionHandler()
 				}
@@ -196,13 +252,12 @@ extension ExpandableCVCellProtocol {
 	public func animateCloseCell() {
 		
 		guard let viewModel = viewModel else { return }
-		
 		viewModel.expandableCVProtocol?.statusBarShoudlBeHidden = false
 		viewModel.expandableCVProtocol?.isCellOpened = false
 		configureGesture(on: .onCollection)
 		
 		let animationBlock = closeCellHandler()
-
+		
 		if animationBlock.isAnimated {
 			
 			UIView.animate(withDuration: viewModel.animationDuration, delay: 0.0, usingSpringWithDamping: viewModel.springDamping, initialSpringVelocity: viewModel.springVelocity, options: .curveEaseInOut, animations: {
@@ -213,7 +268,7 @@ extension ExpandableCVCellProtocol {
 				if let animations = animationBlock.handler {
 					animations()
 				}
-
+				
 				self.layoutIfNeeded()
 			}, completion: { _ in
 				
@@ -229,11 +284,11 @@ extension ExpandableCVCellProtocol {
 	/// Default logic to snap the cell back when released
 	
 	public func animateSnapBackCell() {
-	
+		
 		let animationBlock = snapBackCellHandler()
 		
 		guard let viewModel = viewModel else { return }
-
+		
 		if animationBlock.isAnimated {
 			
 			UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: viewModel.springDamping, initialSpringVelocity: viewModel.springVelocity, options: .curveEaseInOut, animations: {
@@ -257,7 +312,7 @@ extension ExpandableCVCellProtocol {
 			noAnimationCompletion(handler: animationBlock.handler, completion: animationBlock.completion)
 		}
 	}
-
+	
 	private func noAnimationCompletion(handler: Handler?, completion: Handler?) {
 		
 		if let handler = handler {
@@ -270,7 +325,7 @@ extension ExpandableCVCellProtocol {
 	}
 	
 	public func cellGesturedLogic() {
-
+		
 		guard let viewModel = viewModel else { return }
 		
 		if viewModel.expandableCVProtocol?.isCellOpened ?? false {
