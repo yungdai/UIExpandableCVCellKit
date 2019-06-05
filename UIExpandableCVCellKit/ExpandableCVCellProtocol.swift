@@ -9,7 +9,7 @@ import Foundation
 
 public typealias Handler = () -> Void
 
-public enum ExpandableCellViewProperties {
+public enum ExpandableCellViewProperty {
 	
 	case openedBounds(CGRect)
 	case openedCenter(CGPoint)
@@ -18,6 +18,8 @@ public enum ExpandableCellViewProperties {
 	case animationDuration(TimeInterval)
 	case dragThreshold(CGFloat)
 }
+
+public typealias ExpandableCellProperties = [ExpandableCellViewProperty]
 
 public protocol ExpandableCVCellProtocol: UICollectionViewCell {
 	
@@ -123,7 +125,7 @@ extension ExpandableCVCellProtocol {
 	
 	/// Configure the cell with the viewModel, this is a reqired function.
 	
-	public func configure(withOptions options: [ExpandableCellViewProperties]?, expandableCVProtocol: ExpandableCVProtocol?) throws {
+	public func configure(withOptions options: ExpandableCellProperties?, expandableCVProtocol: ExpandableCVProtocol?) throws {
 
 		guard let expandableCVProtocol = expandableCVProtocol else { throw ExpandableCellErrors.noExpandableCVProtocol }
 		
