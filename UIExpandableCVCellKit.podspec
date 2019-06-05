@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'UIExpandableCVCellKit'
-  s.version          = '1.02'
+  s.version          = '1.03'
   s.swift_versions   = '5.0'
   s.summary          = 'Recreate the Apple Appstore cell expansion experience!'
 
