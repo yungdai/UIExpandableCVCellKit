@@ -21,7 +21,8 @@ Required:
 
   This will ensure when you swap between apps, that the scrolling is set to the correct setting when you swap between apps
   
-- in collectionView(_ collectionView:, cellForItemAt indexPath:) dequeue your cell and then create the ExpandedCellViewModel and pass it to the cell using the ExpandableCVCellProtocol.configure(with: ExpandedCellViewMode) function, this will help the cell configure itself with all the settings it needs to function.
+- in collectionView(_ collectionView:, cellForItemAt indexPath:) dequeue your cell and then create the ExpandedCellViewModel and pass it to the cell using the ExpandableCVCellProtocol.configure(withOptions options: [ExpandableCellViewProperties]?, expandableCVProtocol: ExpandableCVProtocol?) function, this will help the cell configure itself with all the settings it needs to function.
+	- You can further tweak the different settings for how cell expands, this is very useful where your collectionView is in a container and is smaller than view that you want to expand it to.  Use the corresponding enum and add the associated value then pass all the enums as an array into the options.
 
 - in collectionView(_ collectionView:, didSelectItemAt indexPath:) impliment animateCellOpen(indexPath:) inside that delegate function to allow the cell to open properly.  This is a manadatory implimentation.
 
