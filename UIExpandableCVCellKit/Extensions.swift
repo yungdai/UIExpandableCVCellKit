@@ -8,16 +8,16 @@
 
 import Foundation
 
-extension UIApplication {
-	
-	/// Handy helper to get access to the statusBar's view
-	var statusBarView: UIView? {
-		guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else {
-			return nil
-		}
-		return statusBarView
-	}
-}
+//extension UIApplication {
+//	
+//	/// Handy helper to get access to the statusBar's view
+//	var statusBarView: UIView? {
+//		guard let statusBarView = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else {
+//			return nil
+//		}
+//		return statusBarView
+//	}
+//}
 
 extension CGFloat {
 	
