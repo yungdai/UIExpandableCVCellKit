@@ -5,7 +5,7 @@
 //  Created by Yung Dai on 2019-05-07.
 //
 
-import Foundation
+import UIKit
 
 public struct ExpandableCellViewModel {
 

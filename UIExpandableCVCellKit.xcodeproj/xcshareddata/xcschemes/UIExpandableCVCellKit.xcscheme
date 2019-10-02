@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9FEB90A922832EC0008BF116"
+               BlueprintIdentifier = "UIExpandableCVCellKit::UIExpandableCVCellKit"
                BuildableName = "UIExpandableCVCellKit.framework"
                BlueprintName = "UIExpandableCVCellKit"
                ReferencedContainer = "container:UIExpandableCVCellKit.xcodeproj">
@@ -27,29 +27,27 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "UIExpandableCVCellKit::UIExpandableCVCellKit"
+            BuildableName = "UIExpandableCVCellKit.framework"
+            BlueprintName = "UIExpandableCVCellKit"
+            ReferencedContainer = "container:UIExpandableCVCellKit.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9FEB90B222832EC0008BF116"
+               BlueprintIdentifier = "UIExpandableCVCellKit::UIExpandableCVCellKitTests"
                BuildableName = "UIExpandableCVCellKitTests.xctest"
                BlueprintName = "UIExpandableCVCellKitTests"
                ReferencedContainer = "container:UIExpandableCVCellKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9FEB90A922832EC0008BF116"
-            BuildableName = "UIExpandableCVCellKit.framework"
-            BlueprintName = "UIExpandableCVCellKit"
-            ReferencedContainer = "container:UIExpandableCVCellKit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Release"
@@ -64,14 +62,12 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9FEB90A922832EC0008BF116"
+            BlueprintIdentifier = "UIExpandableCVCellKit::UIExpandableCVCellKit"
             BuildableName = "UIExpandableCVCellKit.framework"
             BlueprintName = "UIExpandableCVCellKit"
             ReferencedContainer = "container:UIExpandableCVCellKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -82,7 +78,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9FEB90A922832EC0008BF116"
+            BlueprintIdentifier = "UIExpandableCVCellKit::UIExpandableCVCellKit"
             BuildableName = "UIExpandableCVCellKit.framework"
             BlueprintName = "UIExpandableCVCellKit"
             ReferencedContainer = "container:UIExpandableCVCellKit.xcodeproj">
