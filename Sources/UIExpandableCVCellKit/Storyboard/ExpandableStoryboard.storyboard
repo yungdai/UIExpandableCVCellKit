@@ -1,60 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Cqg-qL-6pR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PAC-KX-UOV">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Expandable Details View Controller-->
-        <scene sceneID="xFc-7C-9Yc">
+        <scene sceneID="a72-7D-YTX">
             <objects>
-                <viewController storyboardIdentifier="ExpandableDetailsVC" modalPresentationStyle="overCurrentContext" id="Cqg-qL-6pR" customClass="ExpandableDetailsViewController" customModule="UIExpandableCVCellKit" sceneMemberID="viewController">
-                    <visualEffectView key="view" opaque="NO" contentMode="scaleToFill" id="Q2K-SO-CDh">
+                <viewController storyboardIdentifier="ExpandableDetailsVC" modalPresentationStyle="overCurrentContext" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PAC-KX-UOV" customClass="ExpandableDetailsViewController" customModule="UIExpandableCVCellKit" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dcl-nC-JdY">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="6oH-N5-LXw">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3fu-wr-YFa">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cvM-VB-zCF">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="HoN-dW-L45">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Muh-XX-VYB">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    </view>
-                                    <vibrancyEffect>
-                                        <blurEffect style="dark"/>
-                                    </vibrancyEffect>
-                                </visualEffectView>
-                            </subviews>
-                            <constraints>
-                                <constraint firstAttribute="bottom" secondItem="3fu-wr-YFa" secondAttribute="bottom" id="3Ts-eF-E53"/>
-                                <constraint firstAttribute="trailing" secondItem="3fu-wr-YFa" secondAttribute="trailing" id="c6u-hQ-u9Y"/>
-                                <constraint firstItem="3fu-wr-YFa" firstAttribute="top" secondItem="6oH-N5-LXw" secondAttribute="top" id="dxU-6W-weG"/>
-                                <constraint firstItem="3fu-wr-YFa" firstAttribute="leading" secondItem="6oH-N5-LXw" secondAttribute="leading" id="y9u-8e-2L8"/>
-                            </constraints>
-                        </view>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BeC-ad-upM">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="chA-T0-1Cj">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            </view>
+                                            <vibrancyEffect>
+                                                <blurEffect style="regular"/>
+                                            </vibrancyEffect>
+                                        </visualEffectView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="BeC-ad-upM" firstAttribute="top" secondItem="HoN-dW-L45" secondAttribute="top" id="9kr-Li-jKk"/>
+                                        <constraint firstAttribute="trailing" secondItem="BeC-ad-upM" secondAttribute="trailing" id="NDA-un-gOi"/>
+                                        <constraint firstItem="BeC-ad-upM" firstAttribute="leading" secondItem="HoN-dW-L45" secondAttribute="leading" id="iVB-KK-ebd"/>
+                                        <constraint firstAttribute="bottom" secondItem="BeC-ad-upM" secondAttribute="bottom" id="qRg-rO-PCD"/>
+                                    </constraints>
+                                </view>
+                                <blurEffect style="regular"/>
+                            </visualEffectView>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <blurEffect style="dark"/>
+                        <constraints>
+                            <constraint firstItem="cvM-VB-zCF" firstAttribute="top" secondItem="dcl-nC-JdY" secondAttribute="top" id="055-cL-CEG"/>
+                            <constraint firstItem="cvM-VB-zCF" firstAttribute="leading" secondItem="dcl-nC-JdY" secondAttribute="leading" id="42R-ig-eEB"/>
+                            <constraint firstAttribute="trailing" secondItem="cvM-VB-zCF" secondAttribute="trailing" id="Mtz-Kb-cmx"/>
+                            <constraint firstAttribute="bottom" secondItem="cvM-VB-zCF" secondAttribute="bottom" id="y7A-Wn-0qV"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="2xy-Is-MZo"/>
                         <connections>
-                            <outletCollection property="gestureRecognizers" destination="Ypd-HF-e2W" appends="YES" id="qvd-pE-39c"/>
+                            <outletCollection property="gestureRecognizers" destination="c6N-vL-zsf" appends="YES" id="15Y-m9-c74"/>
                         </connections>
-                    </visualEffectView>
+                    </view>
                     <connections>
-                        <outlet property="blurView" destination="Q2K-SO-CDh" id="w2w-fW-FDR"/>
-                        <outlet property="panGesture" destination="Ypd-HF-e2W" id="QnY-1j-gF4"/>
+                        <outlet property="blurView" destination="cvM-VB-zCF" id="TUj-33-hh8"/>
+                        <outlet property="panGesture" destination="c6N-vL-zsf" id="ovO-YA-X6g"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jlL-tA-Zn4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="Ypd-HF-e2W">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RZ8-TL-xqs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="c6N-vL-zsf">
                     <connections>
-                        <action selector="gesturedScreen:" destination="Cqg-qL-6pR" id="L6L-S9-Prs"/>
-                        <outlet property="delegate" destination="Cqg-qL-6pR" id="v2b-IV-981"/>
+                        <action selector="gesturedScreen:" destination="PAC-KX-UOV" id="ajz-kQ-CgF"/>
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="121.875"/>
+            <point key="canvasLocation" x="-96" y="-552"/>
         </scene>
     </scenes>
 </document>

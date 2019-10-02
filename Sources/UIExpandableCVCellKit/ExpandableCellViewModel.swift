@@ -7,6 +7,8 @@
 
 import UIKit
 
+
+
 public struct ExpandableCellViewModel {
 
 	let originalBounds: CGRect

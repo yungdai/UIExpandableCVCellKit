@@ -29,6 +29,8 @@
 		9F7AA4ED2344E172006CE5C7 /* ExpandableCVCKitErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7AA4E52344E172006CE5C7 /* ExpandableCVCKitErrors.swift */; };
 		9F7AA4EE2344E172006CE5C7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7AA4E72344E172006CE5C7 /* Extensions.swift */; };
 		9F7AA4FF2344EBA1006CE5C7 /* ExpandableStoryboard.storyboard in Sources */ = {isa = PBXBuildFile; fileRef = 9F7AA4FA2344E55E006CE5C7 /* ExpandableStoryboard.storyboard */; };
+		9F7AA5022344F12C006CE5C7 /* ExpandableDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7AA5012344F12C006CE5C7 /* ExpandableDetailsViewModel.swift */; };
+		9F7AA50423451C71006CE5C7 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7AA50323451C71006CE5C7 /* DetailView.swift */; };
 		OBJ_33 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_44 /* UIExpandableCVCellKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* UIExpandableCVCellKitTests.swift */; };
 		OBJ_45 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* XCTestManifests.swift */; };
@@ -63,6 +65,8 @@
 		9F7AA4F22344E19B006CE5C7 /* UIExpandableCVCellKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIExpandableCVCellKit.h; sourceTree = "<group>"; };
 		9F7AA4FA2344E55E006CE5C7 /* ExpandableStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ExpandableStoryboard.storyboard; sourceTree = "<group>"; };
 		9F7AA5002344ED8B006CE5C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = UIExpandableCVCellKit/Info.plist; sourceTree = SOURCE_ROOT; };
+		9F7AA5012344F12C006CE5C7 /* ExpandableDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDetailsViewModel.swift; sourceTree = "<group>"; };
+		9F7AA50323451C71006CE5C7 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		OBJ_12 /* UIExpandableCVCellKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExpandableCVCellKitTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		OBJ_17 /* UIExpandableCVCellKitTests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = UIExpandableCVCellKitTests; sourceTree = SOURCE_ROOT; };
@@ -163,6 +167,8 @@
 				9F7AA4E72344E172006CE5C7 /* Extensions.swift */,
 				9F7AA4D92344DFB6006CE5C7 /* UIExpandableCVCellKit.swift */,
 				9F7AA4E32344E149006CE5C7 /* ExpandableCVCellProtocol.swift */,
+				9F7AA5012344F12C006CE5C7 /* ExpandableDetailsViewModel.swift */,
+				9F7AA50323451C71006CE5C7 /* DetailView.swift */,
 			);
 			name = UIExpandableCVCellKit;
 			path = Sources/UIExpandableCVCellKit;
@@ -260,7 +266,9 @@
 				9F7AA4FF2344EBA1006CE5C7 /* ExpandableStoryboard.storyboard in Sources */,
 				9F7AA4EA2344E172006CE5C7 /* ExpandableCellViewModel.swift in Sources */,
 				9F7AA4EB2344E172006CE5C7 /* ExpandableDetailsViewController.swift in Sources */,
+				9F7AA50423451C71006CE5C7 /* DetailView.swift in Sources */,
 				9F7AA4EC2344E172006CE5C7 /* ExpandableCVProtocol.swift in Sources */,
+				9F7AA5022344F12C006CE5C7 /* ExpandableDetailsViewModel.swift in Sources */,
 				9F7AA4E42344E149006CE5C7 /* ExpandableCVCellProtocol.swift in Sources */,
 				9F7AA4ED2344E172006CE5C7 /* ExpandableCVCKitErrors.swift in Sources */,
 				9F7AA4DA2344DFB6006CE5C7 /* UIExpandableCVCellKit.swift in Sources */,

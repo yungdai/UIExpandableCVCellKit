@@ -34,7 +34,6 @@
                         <blurEffect style="regular"/>
                     </visualEffectView>
                     <connections>
-                        <outlet property="blurView" destination="Q2K-SO-CDh" id="w2w-fW-FDR"/>
                         <outlet property="panGesture" destination="Ypd-HF-e2W" id="xa6-dA-EPj"/>
                     </connections>
                 </viewController>
