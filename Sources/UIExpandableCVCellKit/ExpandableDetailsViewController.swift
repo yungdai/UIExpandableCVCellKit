@@ -29,8 +29,11 @@ final public class ExpandableDetailsViewController: UIViewController {
 	@IBOutlet weak var blurView: UIVisualEffectView!
 	@IBOutlet var panGesture: UIPanGestureRecognizer!
 	
-	var detailView = UIView()
-	var containerView = UIView()
+	@IBOutlet weak var detailView: UIView!
+	@IBOutlet weak var containerView: UIView!
+	@IBOutlet weak var rightSideView: UIView!
+	@IBOutlet weak var leftSideView: UIView!
+	
 	var animator: UIViewPropertyAnimator!
 	
 	// start the touch when the animation is completed
@@ -40,12 +43,14 @@ final public class ExpandableDetailsViewController: UIViewController {
 		super.viewDidLoad()
 		
 		self.blurView.effect = nil
+		self.rightSideView.alpha = 0
+		self.leftSideView.alpha = 0
 	}
-	
+
 	private func configureDetailView() {
-		
-		// start the animation then pause it to initiate the interactivity
-		
+
+		animateSidesOut()
+
 		if let viewModel = expandableDetailsViewModel {
 			
 			detailView.backgroundColor = UIColor.white
@@ -57,21 +62,28 @@ final public class ExpandableDetailsViewController: UIViewController {
 			detailView.bounds = newBounds
 			detailView.center = newCenter
 			detailView.frame = newFrame
-			detailView.layer.cornerRadius = 20
+			
+			containerView.bounds = newBounds
+			containerView.center = newCenter
+			containerView.frame = newFrame
+			
+			detailView.layer.cornerRadius = 15
 			detailView.backgroundColor = UIColor.systemPink
 			detailView.autoresizesSubviews = true
 
-			containerView = viewModel.detailView
-			containerView.frame = detailView.bounds
-			containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+			containerView.backgroundColor = .cyan
+			containerView.layoutIfNeeded()
+			detailView.setNeedsLayout()
+
+			
 			
 			// add subview first
-			detailView.addSubview(containerView)
+//			detailView.addSubview(containerView)
 			
 			// add constraints second
-			detailView.addConstraints(toContainerView: containerView)
-	
-			view.addSubview(detailView)
+//			detailView.addConstraints(toContainerView: containerView)
+//
+//			view.addSubview(detailView)
 
 			self.detailView.subviews.forEach {
 				print("SubView bounds: \($0.bounds)")
@@ -108,11 +120,15 @@ final public class ExpandableDetailsViewController: UIViewController {
 
 			self.detailView.frame = (isiPad) ?  self.view.convert(iPadBounds, to: self.view.coordinateSpace) : self.view.frame
 			self.detailView.bounds = (isiPad) ?  self.view.convert(iPadBounds, to: self.view.coordinateSpace) : self.view.bounds
-			self.detailView.layoutIfNeeded()
 			
-			if isiPad {
-				self.containerView.frame = self.detailView.bounds
-			}
+			self.containerView.frame = (isiPad) ?  self.view.convert(iPadBounds, to: self.view.coordinateSpace) : self.view.frame
+			self.containerView.bounds = (isiPad) ?  self.view.convert(iPadBounds, to: self.view.coordinateSpace) : self.view.bounds
+
+			self.animateSidesIn()
+
+//			if isiPad {
+//				self.containerView.frame = self.detailView.bounds
+//			}
 		}
 		
 		animator.startAnimation()
@@ -122,6 +138,20 @@ final public class ExpandableDetailsViewController: UIViewController {
 			self.animator = nil
 			self.dismiss(animated: false, completion: nil)
 		}
+	}
+	
+	private func animateSidesOut() {
+		self.rightSideView.center.x += self.rightSideView.bounds.width + 20
+		self.rightSideView.layer.cornerRadius = 15
+		self.leftSideView.center.x -= self.leftSideView.bounds.width + 20
+		self.leftSideView.layer.cornerRadius = 15
+	}
+	
+	private func animateSidesIn() {
+		self.rightSideView.center.x -= self.rightSideView.bounds.width + 20
+		self.rightSideView.alpha = 1
+		self.leftSideView.center.x += self.leftSideView.bounds.width + 20
+		self.leftSideView.alpha = 1
 	}
 	
 	private func animateOut() {
@@ -208,8 +238,7 @@ extension UIView {
 
 		containerView.center = self.center
 		containerView.translatesAutoresizingMaskIntoConstraints = false
-		
-		containerView.center = self.convert(self.center, from: self.superview)
+
 		self.addConstraints(constraints)
 		NSLayoutConstraint.activate(constraints)
 	}
