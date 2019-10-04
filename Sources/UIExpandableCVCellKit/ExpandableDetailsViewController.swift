@@ -11,159 +11,206 @@ import UIKit
 extension CALayer {
 	/// Use this to set the CALayer to the center a parent view.
 	public func setLayerToCenter(of rect: CGRect) {
-		
 		position = CGPoint(x: rect.width / 2, y: rect.height / 2)
 	}
 }
 
+var isiPad: Bool {
+	(UIDevice.current.userInterfaceIdiom == .pad) ? true : false
+}
+
+let detailWidthPercentage = 1 - (712 / UIScreen.main.bounds.width)
+let detailHeightPercentage = 1 - (926 / UIScreen.main.bounds.height)
 
 final public class ExpandableDetailsViewController: UIViewController {
+	
 	
 	public var expandableDetailsViewModel: ExpandableDetailsViewModel?
 	@IBOutlet weak var blurView: UIVisualEffectView!
 	@IBOutlet var panGesture: UIPanGestureRecognizer!
 	
-	var detailView = DetailView()
+	var detailView = UIView()
+	var containerView = UIView()
 	var animator: UIViewPropertyAnimator!
 	
 	// start the touch when the animation is completed
-	var progressWhenInterupted: CGFloat = 1.0
-
-	override public func viewDidLoad() {
-        super.viewDidLoad()
-
-		self.blurView.effect = nil
-
-        // Do any additional setup after loading the view.
-    }
+	var fractionComplete: CGFloat = 1.0
 	
-	override public func viewDidAppear(_ animated: Bool) {
+	override public func viewDidLoad() {
+		super.viewDidLoad()
+		
+		self.blurView.effect = nil
+	}
+	
+	private func configureDetailView() {
 		
 		// start the animation then pause it to initiate the interactivity
 		
 		if let viewModel = expandableDetailsViewModel {
 			
 			detailView.backgroundColor = UIColor.white
+			
+			let newBounds = viewModel.detailView.convert(viewModel.detailView.bounds, to: view.coordinateSpace)
+			let newCenter = viewModel.detailView.convert(viewModel.detailView.center, to: view.coordinateSpace)
+			let newFrame = viewModel.detailView.convert(viewModel.detailView.frame, to: view.coordinateSpace)
 
-			let newBounds = viewModel.detailView.convert(viewModel.detailView.bounds, to: self.view.coordinateSpace)
-			
-			let newCenter = viewModel.detailView.convert(viewModel.detailView.center, to: self.view.coordinateSpace)
-			
-			let newFrame = viewModel.detailView.convert(viewModel.detailView.frame, to: self.view.coordinateSpace)
-			
 			detailView.bounds = newBounds
 			detailView.center = newCenter
 			detailView.frame = newFrame
 			detailView.layer.cornerRadius = 20
-			
-			viewModel.detailView.bounds = detailView.convert(viewModel.detailView.bounds, to: detailView.coordinateSpace)
+			detailView.backgroundColor = UIColor.systemPink
+			detailView.autoresizesSubviews = true
 
+			containerView = viewModel.detailView
+			containerView.frame = detailView.bounds
+			containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 			
-			viewModel.detailView.layer.bounds = detailView.convert(viewModel.detailView.layer.bounds, to: self.detailView)
+			// add subview first
+			detailView.addSubview(containerView)
 			
-			let detailLayer = viewModel.detailView.layer
-			detailLayer.frame = detailView.layer.frame
-			detailLayer.needsDisplayOnBoundsChange = true
-
-			detailView.layer.addSublayer(detailLayer)
+			// add constraints second
+			detailView.addConstraints(toContainerView: containerView)
+	
 			view.addSubview(detailView)
 
-		}
+			self.detailView.subviews.forEach {
+				print("SubView bounds: \($0.bounds)")
+				print("detailView bounds: \(self.detailView.bounds)")
+				print("detailView origin: \(self.detailView.bounds.origin)")
 
+			}
+		}
+	}
+	
+	override public func viewDidAppear(_ animated: Bool) {
+		configureDetailView()
 		animateIn()
 	}
-    
+	
+
+	
 	private func animateIn() {
-		
-		animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: {
+
+		self.containerView.layoutIfNeeded()
+		animator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.8) {
 			
 			/// required so the animation doesn't create retain cycles for the views
 			[unowned self] in
 			
 			self.blurView.effect = UIBlurEffect(style: .dark)
 			
-			self.detailView.bounds = self.view.coordinateSpace.bounds
-			self.detailView.center = self.view.center
-			self.detailView.frame = self.view.frame
+			let detailWidthPercentage = 1 - (712 / self.view.frame.width)
+			let detailHeightPercentage = 1 - (926 / self.view.frame.height)
+			let detailWidth =  self.view.frame.width - (self.view.frame.width * detailWidthPercentage)
+			let detailHeight = self.view.frame.height - (self.view.frame.height * detailHeightPercentage)
+			
+			let iPadBounds = CGRect(x: (self.view.frame.width - detailWidth) / 2, y: (self.view.frame.height - detailHeight) / 2, width: detailWidth, height: detailHeight)
 
-			if let detailLayer = self.detailView.layer.sublayers?.first {
-				
-				detailLayer.bounds = self.detailView.layer.bounds
-				detailLayer.frame.size.width = self.detailView.layer.bounds.size.width
-				detailLayer.frame.size.height = self.detailView.layer.bounds.size.height
-				detailLayer.setLayerToCenter(of: self.detailView.bounds)
-				detailLayer.setNeedsDisplay()
-
+			self.detailView.frame = (isiPad) ?  self.view.convert(iPadBounds, to: self.view.coordinateSpace) : self.view.frame
+			self.detailView.bounds = (isiPad) ?  self.view.convert(iPadBounds, to: self.view.coordinateSpace) : self.view.bounds
+			self.detailView.layoutIfNeeded()
+			
+			if isiPad {
+				self.containerView.frame = self.detailView.bounds
 			}
-		})
+		}
+		
 		animator.startAnimation()
 		animator.pausesOnCompletion = true
-
-		animator.addCompletion({ [unowned self] (_) in
+		
+		animator.addCompletion { [unowned self] _ in
 			self.animator = nil
-			
 			self.dismiss(animated: false, completion: nil)
-		})
+		}
 	}
 	
 	private func animateOut() {
-
+		
 		animator.isReversed = true
 		animator.startAnimation()
 		animator.pausesOnCompletion = false
 	}
-
+	
 	@IBAction func gesturedScreen(_ sender: UIPanGestureRecognizer) {
-
+		
 		switch sender.state {
-            case .began:
-            
-            // begin with what might possibly be a continuation of the current animation.
-            animator.fractionComplete = progressWhenInterupted
-            progressWhenInterupted = animator.fractionComplete
-            
-        case .changed:
+		case .began:
 			
-			let detailLayer = detailView.layer.sublayers?.first!
+			// begin with what might possibly be a continuation of the current animation.
+			animator.fractionComplete = fractionComplete
+			fractionComplete = animator.fractionComplete
+			
+		case .changed:
 			
 			
-			print("DetailLayer, width: \(detailLayer?.frame.width), height: \(detailLayer?.frame.height)")
-			
-			print("Layer, width: \(detailView.layer.frame.width), height: \(detailView.layer.frame.height)")
-            
-            // set the translation into the view that you will be touching
-            let translation = sender.translation(in: self.blurView)
-            
-			
-			if animator.fractionComplete < 0.75 {
-				animateOut()
-			} else {
-
-				animator.fractionComplete = (-translation.y / 100) + progressWhenInterupted
-			}
-			
-
-            
-        case .ended:
-            
-            // when the gesture ends make sure that your record how much of the animation has been completed.
-            progressWhenInterupted = animator.fractionComplete
+			//			print("DetailView, width: \(String(describing: detailView.frame.width)), height: \(String(describing: detailView.frame.height))")
+			//			print("iPadBounds, width: \(String(describing: iPadBounds.width)), height: \(String(describing: iPadBounds.height))")
 			
 			
-            break
-        default:
-            break
-        }
+			// set the translation into the view that you will be touching
+			let translation = sender.translation(in: self.blurView)
+			
+			
+			//			if animator.fractionComplete < 0.75 {
+			//				animateOut()
+			//			} else {
+			
+			animator.fractionComplete = (-translation.y / 100) + fractionComplete
+			//			}
+			
+		case .ended:
+			
+			// when the gesture ends make sure that your record how much of the animation has been completed.
+			fractionComplete = animator.fractionComplete
+			
+			// TODO: Add snapback logic
+			
+			
+			break
+		default:
+			break
+		}
 		
 	}
-	/*
-    // MARK: - Navigation
+	
+}
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
+extension UIView {
+	
+	internal func addConstraints(toContainerView containerView: UIView) {
+		
+		let centerX = NSLayoutConstraint(item: containerView,
+										 attribute: .centerX, relatedBy: .equal, toItem: self,
+										 attribute: .centerX,
+										 multiplier: 1,
+										 constant: 0)
+		
+		let centerY = NSLayoutConstraint(item: containerView,
+										 attribute: .centerY, relatedBy: .equal, toItem: self,
+										 attribute: .centerY,
+										 multiplier: 1,
+										 constant: 0)
+		
+		let equalWidth = NSLayoutConstraint(item: containerView,
+											attribute: .width, relatedBy: .equal, toItem: self,
+											attribute: .width,
+											multiplier: 1,
+											constant: 0)
+		
+		let equalHeight = NSLayoutConstraint(item: containerView,
+											 attribute: .height, relatedBy: .equal, toItem: self,
+											 attribute: .height,
+											 multiplier: 1,
+											 constant: 0)
+		
+		let constraints = [centerX, centerY, equalWidth, equalHeight]
+
+		containerView.center = self.center
+		containerView.translatesAutoresizingMaskIntoConstraints = false
+		
+		containerView.center = self.convert(self.center, from: self.superview)
+		self.addConstraints(constraints)
+		NSLayoutConstraint.activate(constraints)
+	}
 }
