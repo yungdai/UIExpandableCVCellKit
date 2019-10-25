@@ -97,6 +97,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9F69A698234CB31500813D87 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				9F7AA4E92344E172006CE5C7 /* ExpandableCVProtocol.swift */,
+				9F7AA4E32344E149006CE5C7 /* ExpandableCVCellProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		9F69A699234CB33000813D87 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9F7AA5012344F12C006CE5C7 /* ExpandableDetailsViewModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9F69A69A234CB33A00813D87 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9F7AA4E62344E172006CE5C7 /* ExpandableDetailsViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		9F69A69B234CB34B00813D87 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				9F7AA4E82344E172006CE5C7 /* ExpandableCellViewModel.swift */,
+				9F7AA4E52344E172006CE5C7 /* ExpandableCVCKitErrors.swift */,
+				9F7AA4E72344E172006CE5C7 /* Extensions.swift */,
+			);
+			path = "Support Files";
+			sourceTree = "<group>";
+		};
 		9F7AA4F02344E196006CE5C7 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,18 +191,15 @@
 		OBJ_8 /* UIExpandableCVCellKit */ = {
 			isa = PBXGroup;
 			children = (
+				9F69A69B234CB34B00813D87 /* Support Files */,
+				9F69A69A234CB33A00813D87 /* ViewController */,
+				9F69A699234CB33000813D87 /* Models */,
+				9F69A698234CB31500813D87 /* Protocol */,
 				9F7AA5002344ED8B006CE5C7 /* Info.plist */,
 				OBJ_19 /* UIExpandableCVCellKit.podspec */,
 				9F7AA4F22344E19B006CE5C7 /* UIExpandableCVCellKit.h */,
 				9F7AA4F02344E196006CE5C7 /* Storyboard */,
-				9F7AA4E82344E172006CE5C7 /* ExpandableCellViewModel.swift */,
-				9F7AA4E52344E172006CE5C7 /* ExpandableCVCKitErrors.swift */,
-				9F7AA4E92344E172006CE5C7 /* ExpandableCVProtocol.swift */,
-				9F7AA4E62344E172006CE5C7 /* ExpandableDetailsViewController.swift */,
-				9F7AA4E72344E172006CE5C7 /* Extensions.swift */,
 				9F7AA4D92344DFB6006CE5C7 /* UIExpandableCVCellKit.swift */,
-				9F7AA4E32344E149006CE5C7 /* ExpandableCVCellProtocol.swift */,
-				9F7AA5012344F12C006CE5C7 /* ExpandableDetailsViewModel.swift */,
 				9F7AA50323451C71006CE5C7 /* DetailView.swift */,
 			);
 			name = UIExpandableCVCellKit;

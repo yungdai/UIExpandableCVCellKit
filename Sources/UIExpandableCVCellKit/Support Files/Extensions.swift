@@ -32,12 +32,12 @@ extension CGFloat {
 
 extension UICollectionView {
 	
-	func getCurrentCenterPoint() -> CGPoint {
-
+	public func getCurrentCenterPoint() -> CGPoint {
+		
 		var currentCenter: CGPoint = CGPoint.zero
 		
 		if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
-
+			
 			switch flowLayout.scrollDirection {
 				
 			case .vertical:
@@ -75,5 +75,56 @@ extension UICollectionView {
 		let offset = CGFloat.returnNumberBetween(minimum: 0, maximum: maxX, inputValue: currentCenterX)
 		
 		return offset
+	}
+}
+
+extension UIView {
+	
+	public func getDocumentsDirectory() -> URL {
+		
+		let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+		let documentsDirectory = paths[0]
+		return documentsDirectory
+	}
+	
+	public func writeViewToDisk(completion: @escaping (URL) -> Void) {
+		
+		/// This help was given from Hacking with Swift
+		let randomFilename = UUID().uuidString
+		let fullPath = getDocumentsDirectory().appendingPathComponent(randomFilename)
+		
+		do {
+			let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+			try data.write(to: fullPath)
+			return completion(fullPath)
+		} catch {
+			print("Unable to save file")
+		}
+	}
+	
+	public func getViewFromDisk(fullPath: URL, completion: @escaping(Any?) -> Void) {
+
+		do {
+			let data = try Data(contentsOf: fullPath)
+			let loadedView = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as! UIView
+
+			return completion(loadedView)
+		} catch {
+			fatalError("Unable to copy view")
+		}
+	}
+	
+	public func copyView() -> UIView? {
+		
+		var view: UIView?
+		
+		self.writeViewToDisk { fullPath in
+			self.getViewFromDisk(fullPath: fullPath) { copiedView in
+			
+				print(copiedView)
+			}
+		}
+
+		return view
 	}
 }

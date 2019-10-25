@@ -15,6 +15,14 @@ extension CALayer {
 	}
 }
 
+extension NSObject {
+    func copyObject<T:NSObject>() throws -> T? {
+        let data = try NSKeyedArchiver.archivedData(withRootObject:self, requiringSecureCoding:false)
+        return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? T
+    }
+}
+
+
 var isiPad: Bool {
 	(UIDevice.current.userInterfaceIdiom == .pad) ? true : false
 }
@@ -62,21 +70,20 @@ final public class ExpandableDetailsViewController: UIViewController {
 			detailView.bounds = newBounds
 			detailView.center = newCenter
 			detailView.frame = newFrame
-			
+
 			containerView.bounds = newBounds
 			containerView.center = newCenter
 			containerView.frame = newFrame
+			
+			guard let copiedView = viewModel.detailView.copyView() else { fatalError("Unable to get copy of view") }
 			
 			detailView.layer.cornerRadius = 15
 			detailView.backgroundColor = UIColor.systemPink
 			detailView.autoresizesSubviews = true
 
 			containerView.backgroundColor = .cyan
-			containerView.layoutIfNeeded()
-			detailView.setNeedsLayout()
 
-			
-			
+
 			// add subview first
 //			detailView.addSubview(containerView)
 			

@@ -43,7 +43,7 @@
                             </visualEffectView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="d0J-Ut-YIc">
                                 <rect key="frame" x="107" y="353" width="200" height="200"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view autoresizesSubviews="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="n2K-C6-6Vq">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
